@@ -22,8 +22,25 @@ jobs:
           egress-policy: 'audit'
           disable-sudo: true
           disable-telemetry: true
-      - uses: 'actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd' # v5.0.1
+      - uses: &checkout 'actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd' # v5.0.1
+      - name: 'Extract list of submodules'
+        id: 'submodules'
+        run: |
+          names=$(git config --file .gitmodules --get-regexp '^submodule\..*\.url$' |
+            awk '{print $2}' |
+            awk -F/ '{print $NF}' |
+            paste -d, -s)
+          echo "names=$names" >>"$GITHUB_OUTPUT"
+      - uses: 'actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42' # v2.1.4
+        id: 'app'
         with:
+          app-id: '${{ vars.APP_ID }}'
+          private-key: '${{ secrets.APP_PKEY }}'
+          repositories: '${{ steps.submodules.outputs.names }}'
+          permission-contents: 'read'
+      - uses: *checkout
+        with:
+          token: '${{ steps.app.outputs.token }}'
           submodules: 'recursive'
       - name: 'Update submodules to latest' # actions/checkout doesn't support --remote
         run: 'git submodule update --init --force --depth=1 --recursive --remote'
