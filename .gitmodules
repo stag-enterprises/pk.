@@ -2,3 +2,7 @@
 	path = components/ROOT
 	url = https://github.com/stag-enterprises/pk._pub
 	branch = main
+[submodule "components/pv"]
+	path = components/pv
+	url = https://github.com/stag-enterprises/pk._pv
+	branch = main
