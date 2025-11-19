@@ -1,0 +1,21 @@
+site:
+  title: 'Knowledge'
+  url: 'https://pk.stag.lol'
+  start_page: 'ROOT::index.adoc'
+content:
+  edit_url: null
+  branches: [ 'HEAD' ]
+  worktrees: true # use uncommitted changes if any
+  sources:
+    - url: './../'
+      start_paths: 'components/*'
+ui:
+  bundle:
+    url: './../build/bundle'
+  supplemental_files: './ui'
+output:
+  clean: true
+  dir: './../build/site'
+antora:
+  extensions:
+    - require: '@antora/lunr-extension'

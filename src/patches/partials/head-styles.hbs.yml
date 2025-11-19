@@ -1,0 +1,10 @@
+id: 'partials/head-styles.hbs'
+language: html
+files: [ 'build/bundle/partials/head-styles.hbs' ]
+rule:
+  pattern: '$DOCUMENT'
+  kind: 'document'
+fix: |
+  $DOCUMENT
+  <link rel="stylesheet" href="{{{uiRootPath}}}/css/custom-styles.css">
+
