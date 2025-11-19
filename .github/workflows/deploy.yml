@@ -1,8 +1,12 @@
 name: 'Build and deploy site'
-run-name: 'Build and deploy site (${{ github.event.repository.name }} was updated)'
+run-name: 'Build and deploy site (${{ inputs.source_repo || github.event.repository.name }} was updated)'
 on:
   push: {}
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        required: false
+        type: 'string'
 jobs:
   build-and-deploy:
     name: 'Build and deploy site'
