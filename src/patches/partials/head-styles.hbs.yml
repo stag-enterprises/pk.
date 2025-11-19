@@ -1,5 +1,5 @@
 id: 'partials/head-styles.hbs'
-language: html
+language: 'html'
 files: [ 'build/bundle/partials/head-styles.hbs' ]
 rule:
   pattern: '$DOCUMENT'

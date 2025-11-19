@@ -1,8 +1,8 @@
 id: 'partials/footer-content.hbs'
-language: html
-files: [ 'build/bundle/partials/footer-content.hbs' ]
+language: 'html'
+files: ['build/bundle/partials/footer-content.hbs']
 rule:
-  pattern: <$TAG $$$BEFORE class="footer" $$$AFTER>$$$CONTENT</$TAG>
+  pattern: '<$TAG $$$BEFORE class="footer" $$$AFTER>$$$CONTENT</$TAG>'
   kind: 'element'
 fix: |
   <$TAG $$$BEFORE class="footer" $$$AFTER>

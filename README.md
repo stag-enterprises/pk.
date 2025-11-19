@@ -1,7 +1,7 @@
 # pk.
 
 This contains the source for [pk.stag.lol], not including the actual content.
-The public content can be found at [stag-enterprises/pk.pub][pk.pub].
+The public content can be found at [stag-enterprises/pk._pub][pk._pub].
 
 ## building
 
@@ -25,7 +25,7 @@ It is then copied to `build/bundle`, and [ast-grep] patches in `src/patches` are
 Finally, [Anatora] builds with component sources from `components/*`, UI from `build/bundle`, and extra UI assets from `src/ui`.
 
 [pk.stag.lol]: https://pk.stag.lol
-[pk.pub]: https://github.com/stag-enterprises/pk.pub
+[pk._pub]: https://github.com/stag-enterprises/pk._pub
 [Bun]: https://bun.sh
 [Anatora]: https://antora.org/
 [ast-grep]: https://ast-grep.github.io
