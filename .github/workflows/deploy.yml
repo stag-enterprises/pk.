@@ -17,12 +17,14 @@ jobs:
     permissions:
       deployments: 'write'
     steps:
-      - uses: 'step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf' # v2.11.1
+      - name: 'Harden-Runner'
+        uses: 'step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf' # v2.11.1
         with:
           egress-policy: 'audit'
           disable-sudo: true
           disable-telemetry: true
-      - uses: &checkout 'actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd' # v5.0.1
+      - name: 'Checkout repository'
+        uses: &checkout 'actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd' # v5.0.1
       - name: 'Extract list of submodules'
         id: 'submodules'
         run: |
@@ -31,23 +33,27 @@ jobs:
             awk -F/ '{print $NF}' |
             paste -d, -s)
           echo "names=$names" >>"$GITHUB_OUTPUT"
-      - uses: 'actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42' # v2.1.4
+      - name: 'Create GitHub app token'
+        uses: 'actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42' # v2.1.4
         id: 'app'
         with:
           app-id: '${{ vars.APP_ID }}'
           private-key: '${{ secrets.APP_PKEY }}'
           repositories: '${{ steps.submodules.outputs.names }}'
           permission-contents: 'read'
-      - uses: *checkout
+      - name: 'Checkout repository submodules'
+        uses: *checkout
         with:
           token: '${{ steps.app.outputs.token }}'
           submodules: 'recursive'
       - name: 'Update submodules to latest' # actions/checkout doesn't support --remote
         run: 'git submodule update --init --force --depth=1 --recursive --remote'
-      - uses: 'oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76' # v2.0.2
+      - name: 'Setup Bun'
+        uses: 'oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76' # v2.0.2
         with:
           bun-version: '1.3.2'
-      - uses: 'actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830' # v4.3.0
+      - name: 'Restore node_modules cache'
+        uses: 'actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830' # v4.3.0
         env:
           cache-name: 'npm'
         with:
