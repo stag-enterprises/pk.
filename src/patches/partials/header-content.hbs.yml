@@ -1,6 +1,6 @@
 id: 'partials/header-content.hbs'
 language: 'html'
-files: ['build/bundle/partials/header-content.hbs']
+files: [ 'build/bundle/partials/header-content.hbs' ]
 rule:
   pattern: '<$TAG $$$BEFORE id="topbar-nav" $$$AFTER>$$$CONTENT</$TAG>'
   kind: 'element'
