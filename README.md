@@ -6,7 +6,7 @@ The public content can be found at [stag-enterprises/pk._pub][pk._pub].
 ## building
 
 You will need [Bun] to run the build script, and `glibc >= 2.32` for [ast-grep].
-Also make sure that submodules are initialized and updated (`git submodule update --init --fetch`).
+Also make sure that submodules are initialized and updated (`git submodule update --init --remote`).
 
 To build:
 
