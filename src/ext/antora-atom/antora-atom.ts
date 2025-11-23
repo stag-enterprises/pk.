@@ -53,8 +53,8 @@ interface ComponentConfig {
 }
 
 export const register: T.Register = async function register({ config }) {
-  const log                = this.getLogger("antora-atom-" + VERSION);
-  const globalConfig       = config as GlobalConfig;
+  const log = this.getLogger("antora-atom-" + VERSION);
+  const globalConfig = config as GlobalConfig;
 
   log.info("Started");
 
@@ -141,10 +141,14 @@ export const register: T.Register = async function register({ config }) {
 
           if (tagComponent === "{*}") {
             for (let component of enabledComponentNames)
-              componentFeeds.push(Object.assign({}, componentFeed, {
-                tags: feedConfig.tags.with(i,
-                  `${component}:${tagModule}:${tagName}`)
-              }));
+              componentFeeds.push(Object.assign({},
+                JSON.parse(JSON.stringify(componentFeed)
+                  .replaceAll("{component}", component)),
+                {
+                  tags: feedConfig.tags.with(i,
+                    `${component}:${tagModule}:${tagName}`)
+                }
+              ));
             continue feed;
           }
         
@@ -156,10 +160,14 @@ export const register: T.Register = async function register({ config }) {
 
             if (tagModule === "{*}") {
               for (let module of byComponent.keys())
-                componentFeeds.push(Object.assign({}, componentFeed, {
-                  tags: feedConfig.tags.with(i,
-                    `${component}:${module}:${tagName}`)
-                }))
+                componentFeeds.push(Object.assign({},
+                  JSON.parse(JSON.stringify(componentFeed)
+                    .replaceAll("{module}", module)),
+                  {
+                    tags: feedConfig.tags.with(i,
+                      `${component}:${module}:${tagName}`)
+                  }
+                ));
               continue feed;
             }
 
@@ -170,11 +178,15 @@ export const register: T.Register = async function register({ config }) {
               if (!byModule) continue;
 
               if (tagName === "{*}") {
-                for (let tag of byModule.get(ALL)!)
-                  componentFeeds.push(Object.assign({}, componentFeed, {
-                    tags: feedConfig.tags.with(i,
-                      `${component}:${module}:${tag}`)
-                  }))
+                for (let tag of byModule.keys()) if (tag !== ALL)
+                  componentFeeds.push(Object.assign({},
+                    JSON.parse(JSON.stringify(componentFeed)
+                      .replaceAll("{tag}", tag)),
+                    {
+                      tags: feedConfig.tags.with(i,
+                        `${component}:${module}:${tag}`)
+                    }
+                  ));
                 continue feed;
               }
 
