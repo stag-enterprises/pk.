@@ -9,6 +9,8 @@
   "devDependencies": {
     "@antora/lunr-extension": "^1.0.0-alpha.12",
     "@ast-grep/cli": "^0.39.9",
+    "@minify-html/node": "^0.18.1",
+    "@types/node": "^24.10.1",
     "antora": "3.1.14",
     "serve": "^14.2.5",
     "wrangler": "^4.49.0"

@@ -39,8 +39,16 @@ cpSync(BUNDLE_DEST, BUNDLE_PATCHED, { recursive: true });
 console.info("Patching UI bundle");
 await Bun.$`bun x ast-grep scan ${BUNDLE_PATCHED} --update-all -c src/sgconfig.yml`;
 
+console.info("Transpiling TypeScript");
+await Bun.$`bun x tsc`.nothrow();
+
 console.info("Running Anatora");
 const local = values.local ? "local-" : "";
-const cmd = { raw: `bun x antora src/${local}antora-playbook.yml --stacktrace --attribute env=` };
+const cmd = { raw: `bun x antora src/${local}antora-playbook.yml --log-level=info --log-format=pretty --stacktrace --attribute env=` };
 if (values.prod) await Bun.$`${cmd}prod --html-url-extension-style drop`;
 else await Bun.$`${cmd}dev`;
+
+// if (values.prod) {
+// 	console.info("Minifying output");
+// 	await Bun.$`bun x minify-html`;
+// }

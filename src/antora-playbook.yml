@@ -18,4 +18,5 @@ output:
   dir: './../build/site'
 antora:
   extensions:
-    - require: '@antora/lunr-extension'
+    - '@antora/lunr-extension'
+    - './../build/js/antora-atom/antora-atom.js'
