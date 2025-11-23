@@ -70,20 +70,32 @@ ext:
         logo: "url to logo, falls back to icon, should be larger"
 ```
 
+You can use feedphobic to remove a page from being present in the feed.
+Use feed-tags or just tags to add tags to a page.
+Use feed-published to specify published date,
+otherwise it will be automatically determined from Git
+(last updated will always be from Git).
+If an author line is present, author(s) will be automatically determined.
+In the case of multiple, the author will be the first,
+and contributors the remaining ones.
+
+> Protip! You can use the `asciidoc.attributes` key in the playbook
+> or component config to globally set attributes.
+> This is especially useful for `feedphobic`
+> to work with a whitelist instead of a blacklist.
+
+Example:
+
 ```asciidoc
 = My Page
 :feedphobic:
 :feed-tags: taga, tagb
-
-You can use feedphobic to remove a page from being present in the feed.
-Use feed-tags or just tags to add tags to a page.
-Use feed-published to specify published date, otherwise it will be automatically determined from Git (last updated will always be from Git).
-If an author line is present, author(s) will be automatically determined. In the case of multiple, the author will be the first, and contributors the remaining ones.
 ```
 
 ### tags
 
 You can tag pages to produce feeds that only include certain articles.
+They will also show up in the entry element in the feed.
 For example, by applying a tag `foo` to some pages,
 you can create a feed with `tags: [ '*:foo' ]`
 to only include those those pages.
