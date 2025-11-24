@@ -1,2 +1,3 @@
-- Make max_entries actually do something (it's a no-op right now)
-- Wildcard with prefix and suffix matching (eg. foo*bar matches foo1bar foo2bar fooasdfbar)
+---- Wildcard with prefix and suffix matching (eg. foo*bar matches foo1bar foo2bar fooasdfbar)
+---- Test behavior with multiple component versions
+DONE Make max_entries actually do something (it's a no-op right now)

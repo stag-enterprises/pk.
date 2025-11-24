@@ -199,7 +199,10 @@ async function register({ config }): Promise<void> {
             }
           }
         }
-        const feedPagesArr = Array.from(feedPages); 
+        let feedPagesArr = Array.from(feedPages);
+        feedPagesArr.sort((a, b) =>
+          a.updated > b.updated ? 1 : a.updated < b.updated ? -1 : 0);
+        feedPagesArr = feedPagesArr.slice(0, feedConfig.maxEntries);
 
         let feedUrl = "";
         if (componentName !== "ROOT") feedUrl += "/" + componentName;
@@ -212,7 +215,7 @@ async function register({ config }): Promise<void> {
 <feed xmlns="http://www.w3.org/2005/Atom">
 <id>${siteUrl}${feedUrl}</id>
 <title>${feedConfig.title}</title>
-  <updated>${feedPagesArr.map(x => x.updated).toSorted().at(-1)}</updated>
+${feedPagesArr[0] ? `<updated>${feedPagesArr[0].updated}</updated>` : ""}
 <link href="${siteUrl}${feedUrl}" rel="self" type="application/atom+xml" />
 ${feedConfig.author?.name ?
   `<author>
