@@ -52,7 +52,8 @@ interface ComponentConfig {
   componentFeeds?: FeedConfig[];
 }
 
-export const register: T.Register = async function register({ config }) {
+export const register: T.Register =
+async function register({ config }): Promise<void> {
   const log = this.getLogger("antora-atom-" + VERSION);
   const globalConfig = config as GlobalConfig;
 
@@ -121,8 +122,10 @@ export const register: T.Register = async function register({ config }) {
           return;
         }
 
-        if (!feedConfig.logo && feedConfig.icon) feedConfig.logo = feedConfig.icon;
-        if (!feedConfig.icon && feedConfig.logo) feedConfig.icon = feedConfig.logo;
+        if (!feedConfig.logo && feedConfig.icon)
+          feedConfig.logo = feedConfig.icon;
+        if (!feedConfig.icon && feedConfig.logo)
+          feedConfig.icon = feedConfig.logo;
 
         const feedPages = new Set<AtomPage>();
         for (let [i, rawTag] of feedConfig.tags.entries()) {
@@ -204,56 +207,56 @@ export const register: T.Register = async function register({ config }) {
         feedUrl += `/${feedConfig.name}.xml`;
 
         siteCatalog.addFile({
-          contents: Buffer.from(`<?xml version="1.0" encoding="utf-8"?>
-  <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>${siteUrl}${feedUrl}</id>
-  <title>${feedConfig.title}</title>
-  <updated>${feedPagesArr.map(x => x.updated).toSorted().at(-1)}</updated>
-  <link href="${siteUrl}${feedUrl}" rel="self" type="application/atom+xml" />
-  ${feedConfig.author?.name ? `
-    <author>
-      <name>${feedConfig.author.name}</name>
-      ${feedConfig.author.email ? `
-        <email>${feedConfig.author.email}</email>` : ""}
-    </author>` : ""}
-  ${feedConfig.contributors?.map(x => x.name ? `
-    <contributor>
-      <name>${x.name}</name>
-      ${x.email ? `<email>${x.email}</email>` : ""}
-    </contributor>` : "") ?? ""}
-  ${feedConfig.categories?.map(x => `<category term="${x}"/>`) ?? ""}
-  <generator
-    uri="https://github.com/stag-enterprises/pk./tree/main/src/ext/antora-atom"
-    version="${VERSION}"
-  >antora-atom.js</generator>
-  ${feedConfig.icon ? `<icon>${feedConfig.icon}</icon>` : ""}
-  ${feedConfig.logo ? `<logo>${feedConfig.logo}</logo>` : ""}
-  ${feedConfig.copyright ? `
-    <rights type="text">${feedConfig.logo}</rights>` : ""}
-  ${feedConfig.description ?
-    `<subtitle>${feedConfig.description}</subtitle>` : ""}
-  ${feedPagesArr.map(x => `
-    <entry>
-      <id>${x.url}</id>
-      <title type="text">${x.title || "Untitled post"}</title>
-      <updated>${x.updated}</updated>
-      <published>${x.published}</published>
-      <content type="html">${x.content}</content>
-      ${x.tags?.map(x => `<category term="${x}" />`) ?? ""}
-      <link href="${x.url}" rel="alternate" type="text/html" />
-      ${x.author?.name ? `
-        <author>
-          <name>${x.author.name}</name>
-          ${x.author.email ? `<email>${x.author.email}</email>` : ""}
-        </author>` : ""}
-      ${x.contributors?.map(x => x.name ? `
-        <contributor>
-          <name>${x.name}</name>
-          ${x.email ? `<email>${x.email}</email>` : ""}
-        </contributor>` : "") ?? ""}
-    </entry>`)}
-  </feed>`),
           out: { path: feedUrl },
+          contents: Buffer.from(`<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<id>${siteUrl}${feedUrl}</id>
+<title>${feedConfig.title}</title>
+  <updated>${feedPagesArr.map(x => x.updated).toSorted().at(-1)}</updated>
+<link href="${siteUrl}${feedUrl}" rel="self" type="application/atom+xml" />
+${feedConfig.author?.name ?
+  `<author>
+    <name>${feedConfig.author.name}</name>
+    ${feedConfig.author.email ?
+      `<email>${feedConfig.author.email}</email>` : ""}
+  </author>` : ""}
+${feedConfig.contributors?.map(x => x.name ?
+  `<contributor>
+    <name>${x.name}</name>
+    ${x.email ? `<email>${x.email}</email>` : ""}
+  </contributor>` : "").join("") ?? ""}
+${feedConfig.categories?.map(x => `<category term="${x}"/>`).join("") ?? ""}
+<generator
+  uri="https://github.com/stag-enterprises/pk./tree/main/src/ext/antora-atom"
+  version="${VERSION}"
+>antora-atom.js</generator>
+${feedConfig.icon ? `<icon>${feedConfig.icon}</icon>` : ""}
+${feedConfig.logo ? `<logo>${feedConfig.logo}</logo>` : ""}
+${feedConfig.copyright ?
+  `<rights type="text">${feedConfig.logo}</rights>` : ""}
+${feedConfig.description ?
+  `<subtitle>${feedConfig.description}</subtitle>` : ""}
+${feedPagesArr.map(x =>
+  `<entry>
+    <id>${x.url}</id>
+    <title type="text">${x.title || "Untitled post"}</title>
+    <updated>${x.updated}</updated>
+    <published>${x.published}</published>
+    <content type="html">${x.content}</content>
+    ${x.tags?.map(x => `<category term="${x}" />`).join("") ?? ""}
+    <link href="${x.url}" rel="alternate" type="text/html" />
+    ${x.author?.name ?
+      `<author>
+        <name>${x.author.name}</name>
+        ${x.author.email ? `<email>${x.author.email}</email>` : ""}
+      </author>` : ""}
+    ${x.contributors?.map(x => x.name ?
+      `<contributor>
+        <name>${x.name}</name>
+        ${x.email ? `<email>${x.email}</email>` : ""}
+      </contributor>` : "").join("") ?? ""}
+  </entry>`).join("")}
+</feed>`),
         });
         log.info("Built feed " + feedUrl);
       }
