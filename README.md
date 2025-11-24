@@ -22,10 +22,10 @@ Start a static server using `bun run serve`.
 
 The default UI is downloaded to `build/bundle-source`, if requested using `--fetch`.
 It is then copied to `build/bundle`, and [ast-grep] patches in `src/patches` are applied.
-Finally, [Anatora] builds with component sources from `components/*`, UI from `build/bundle`, and extra UI assets from `src/ui`.
+Finally, [Antora] builds with component sources from `components/*`, UI from `build/bundle`, and extra UI assets from `src/ui`.
 
 [pk.stag.lol]: https://pk.stag.lol
 [pk._pub]: https://github.com/stag-enterprises/pk._pub
 [Bun]: https://bun.sh
-[Anatora]: https://antora.org/
+[Antora]: https://antora.org/
 [ast-grep]: https://ast-grep.github.io
