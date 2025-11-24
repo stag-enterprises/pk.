@@ -24,8 +24,14 @@ The default UI is downloaded to `build/bundle-source`, if requested using `--fet
 It is then copied to `build/bundle`, and [ast-grep] patches in `src/patches` are applied.
 Finally, [Antora] builds with component sources from `components/*`, UI from `build/bundle`, and extra UI assets from `src/ui`.
 
+# extensions
+
+There are some extensions in this repository, and they are self-contained, so they can be used in other sites.
+Please look in [`src/ext`], each directory's (which contains an extension) `README.md`.
+
 [pk.stag.lol]: https://pk.stag.lol
 [pk._pub]: https://github.com/stag-enterprises/pk._pub
 [Bun]: https://bun.sh
 [Antora]: https://antora.org/
 [ast-grep]: https://ast-grep.github.io
+[`src/ext`]: https://github.com/stag-enterprises/pk./tree/main/src/ext
