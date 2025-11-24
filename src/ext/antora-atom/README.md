@@ -4,6 +4,16 @@ This extension automatically generates Atom feeds per-component for Antora.
 
 This extension is very new and barely tested so expect lots of bugs.
 
+## pitfalls
+
+Currently, having multiple versions of the same component
+does not bear well with `antora-atom`.
+
+This won't be a problem,
+eg. if you have a component named `blog` without a version,
+but if you do have versions there is very strange behavior.
+I am working on fixing this.
+
 ## installation
 
 Clone this repository and run tsc.
@@ -106,6 +116,7 @@ but module and name are always required.
 
 You can use the `*` glyph to represent any available option, as shown above.
 To get a feed with all pages from a component, you could do `*:*`.
+Also, using `*` as a tag name will get all pages, even those without any tags.
 
 You can use the `{*}` glyph,
 which acts like the current feed was duplicated for every possible value for it.
