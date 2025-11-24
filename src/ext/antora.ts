@@ -3,10 +3,10 @@ import EventEmitter from "node:events";
 export type Register = (this: RegisterThis, api: { config: Config }) => void;
 
 export interface RegisterThis extends EventEmitter {
-  getLogger: (name: string) => {
+  getLogger(name: string): {
     debug: (msg: string) => void;
-    info: (msg: string) => void;
-    warn: (msg: string) => void;
+    info:  (msg: string) => void;
+    warn:  (msg: string) => void;
     error: (msg: string) => void;
     fatal: (msg: string) => void;
   };
@@ -25,8 +25,8 @@ export interface ComponentSpec extends Version {
 export interface DocumentsConverted {
   playbook: Playbook;
   contentCatalog: {
-    getPages: () => Page[];
-    getComponents: () => Component[];
+    getPages(): Page[];
+    getComponents(): Component[];
   };
 }
 
@@ -46,21 +46,19 @@ export interface Component {
 }
 
 export interface Playbook {
-  site: {
-    url?: string;
-  };
+  site: { url?: string; };
 }
 
 export interface Page {
   _contents: Buffer;
   src: {
     component: string;
-    module: string;
-    version: string;
-    abspath: string;
+    module:    string;
+    version:   string;
+    abspath:   string;
     origin: {
-      gitdir: string;
-      worktree: string;
+      gitdir:    string;
+      worktree:  string;
       startPath: string;
     };
   };
