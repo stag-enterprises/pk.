@@ -1,3 +1,3 @@
 ---- Wildcard with prefix and suffix matching (eg. foo*bar matches foo1bar foo2bar fooasdfbar)
----- Treat component versions as unique components
+DONE Treat component versions as unique components
 DONE Make max_entries actually do something (it's a no-op right now)

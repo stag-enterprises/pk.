@@ -4,6 +4,7 @@ import type * as T from "../antora";
 
 const VERSION = "0.1.0";
 const ALL = Symbol("all");
+const LATEST = Symbol("latest");
 const DEFAULT_FEED_CONFIG: FeedConfig = {
   title:      "My Atom Feed",
   tags:       [],
@@ -21,6 +22,7 @@ interface AtomPage {
   title:        string;
   updated:      string;
   url:          string;
+  version:      string;
 }
 
 interface Person {
@@ -74,9 +76,10 @@ async function register({ config }): Promise<void> {
   });
 
   let siteUrl: string;
-  // component->module->tag->pages
-  let allPagesByPromise:
-    Promise<Map<string, Map<string, Map<string | typeof ALL, AtomPage[]>>>>;
+  // component->version|LATEST->module->tag|ALL->pages
+  type ByModule = Map<string, Map<string | typeof ALL, AtomPage[]>>;
+  type ByComponent = Map<string, Map<string | typeof LATEST, ByModule>>;
+  let allPagesByPromise: Promise<ByComponent>;
   this.once("documentsConverted", ({
     playbook: { site }, contentCatalog,
   }: T.DocumentsConverted) => {
@@ -88,13 +91,19 @@ async function register({ config }): Promise<void> {
     allPagesByPromise = Promise.all(
       contentCatalog.getPages().partialMap(makePage.bind(null, site.url)),
     ).then(allPages => {
-      let pages = new Map();
+      let pages: ByComponent = new Map();
       for (let page of allPages) {
         const moduleTags = pages
           .getOrInsert(page.component, new Map())
+          .getOrInsert(page.version, new Map())
           .getOrInsert(page.module, new Map());
         moduleTags.getOrInsert(ALL, []).push(page);
         for (let tag of page.tags) moduleTags.getOrInsert(tag, []).push(page);
+      }
+      const components = contentCatalog.getComponents();
+      for (let [component, byVersion] of pages.entries()) {
+        const latest = components.find(x => x.name === component)!.latest.name;
+        byVersion.set(LATEST, byVersion.get(latest)!);
       }
       return pages;
     });
@@ -103,10 +112,8 @@ async function register({ config }): Promise<void> {
   this.once("beforePublish", async ({ siteCatalog }: T.BeforePublish) => {
     const allPagesBy = await allPagesByPromise;
     const enabledComponentNames = enabledComponents.map(x => x.name);
-    for (let {
-      name: componentName, version: componentVersion, config: componentConfig
-    } of enabledComponents) {
-      const componentFeeds = componentConfig?.componentFeeds
+    for (let component of enabledComponents) {
+      const componentFeeds = component.config?.componentFeeds
         ?? globalConfig.defaultComponentFeeds;
       if (!componentFeeds) continue;
 
@@ -114,11 +121,11 @@ async function register({ config }): Promise<void> {
         const feedConfig = Object.assign({},
           DEFAULT_FEED_CONFIG,
           globalConfig.feedOptions,
-          componentConfig?.feedOptions,
+          component.config?.feedOptions,
           componentFeed,
         ) as FeedConfig;
         if (!feedConfig.name) {
-          log.fatal(`No feed name provided for feed in ${componentName}`);
+          log.fatal(`No feed name provided for feed in ${component.name}`);
           return;
         }
 
@@ -128,14 +135,14 @@ async function register({ config }): Promise<void> {
           feedConfig.icon = feedConfig.logo;
 
         const feedPages = new Set<AtomPage>();
-        for (let [i, rawTag] of feedConfig.tags.entries()) {
+        for (let [tagIdx, rawTag] of feedConfig.tags.entries()) {
           const tagParts = rawTag.split(":");
           let tagComponent: string, tagModule: string, tagName: string;
           if (tagParts.length === 3)
             [tagComponent, tagModule, tagName] =
               tagParts as [string, string, string];
           else if (tagParts.length === 2) {
-            tagComponent = componentName;
+            tagComponent = `${component.version}@${component.name}`;
             [tagModule, tagName] = tagParts as [string, string];
           } else {
             log.fatal("Invalid tag identifier " + rawTag);
@@ -148,7 +155,7 @@ async function register({ config }): Promise<void> {
                 JSON.parse(JSON.stringify(componentFeed)
                   .replaceAll("{component}", component)),
                 {
-                  tags: feedConfig.tags.with(i,
+                  tags: feedConfig.tags.with(tagIdx,
                     `${component}:${tagModule}:${tagName}`)
                 }
               ));
@@ -158,16 +165,23 @@ async function register({ config }): Promise<void> {
           for (let component of
             tagComponent === "*" ? enabledComponentNames : [tagComponent]
           ) {
-            const byComponent = allPagesBy.get(component);
+            let [a, b] = component.split("@") as [string, string?];
+            let [componentVersion, componentName] =
+              b ? [a, b] : [LATEST, a] as const;
+
+            const byComponent = allPagesBy.get(componentName);
             if (!byComponent) continue;
 
+            const byVersion = byComponent.get(componentVersion);
+            if (!byVersion) continue;
+
             if (tagModule === "{*}") {
-              for (let module of byComponent.keys())
+              for (let module of byVersion.keys())
                 componentFeeds.push(Object.assign({},
                   JSON.parse(JSON.stringify(componentFeed)
                     .replaceAll("{module}", module)),
                   {
-                    tags: feedConfig.tags.with(i,
+                    tags: feedConfig.tags.with(tagIdx,
                       `${component}:${module}:${tagName}`)
                   }
                 ));
@@ -175,9 +189,9 @@ async function register({ config }): Promise<void> {
             }
 
             for (let module of
-              tagModule === "*" ? byComponent.keys() : [tagModule]
+              tagModule === "*" ? byVersion.keys() : [tagModule]
             ) {
-              const byModule = byComponent.get(module);
+              const byModule = byVersion.get(module);
               if (!byModule) continue;
 
               if (tagName === "{*}") {
@@ -186,7 +200,7 @@ async function register({ config }): Promise<void> {
                     JSON.parse(JSON.stringify(componentFeed)
                       .replaceAll("{tag}", tag)),
                     {
-                      tags: feedConfig.tags.with(i,
+                      tags: feedConfig.tags.with(tagIdx,
                         `${component}:${module}:${tag}`)
                     }
                   ));
@@ -205,8 +219,8 @@ async function register({ config }): Promise<void> {
         feedPagesArr = feedPagesArr.slice(0, feedConfig.maxEntries);
 
         let feedUrl = "";
-        if (componentName !== "ROOT") feedUrl += "/" + componentName;
-        if (componentVersion !== "") feedUrl += "/" + componentVersion;
+        if (component.name !== "ROOT") feedUrl += "/" + component.name;
+        if (component.version !== "") feedUrl += "/" + component.version;
         feedUrl += `/${feedConfig.name}.xml`;
 
         siteCatalog.addFile({
@@ -277,7 +291,7 @@ const HTML_ESCAPE_REPLACER = (x: string): string => HTML_ESCAPE_MAP[x]!;
 function makePage(baseUrl: string, {
   _contents: content,
   src: {
-    component, module,
+    component, module, version,
     abspath: path,
     origin: { startPath, worktree },
   },
@@ -309,7 +323,7 @@ function makePage(baseUrl: string, {
   ]).then(([published, updated]) => {
     const page: AtomPage = {
       url: baseUrl + url,
-      title, tags, module, component, published, updated,
+      title, tags, module, component, version, published, updated,
       contributors: [],
       author: {
         ...cleanInsert("name", attributes["author"] ?? attributes["author_1"]),

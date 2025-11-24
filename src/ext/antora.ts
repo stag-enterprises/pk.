@@ -15,12 +15,10 @@ export interface RegisterThis extends EventEmitter {
 export type Config = Record<string, any>;
 
 export interface ContentAggregated {
-  contentAggregate: Component[];
+  contentAggregate: ComponentSpec[];
 }
 
-export interface Component {
-  name: string;
-  version: string;
+export interface ComponentSpec extends Version {
   ext?: Record<string, any>;
 }
 
@@ -28,7 +26,23 @@ export interface DocumentsConverted {
   playbook: Playbook;
   contentCatalog: {
     getPages: () => Page[];
+    getComponents: () => Component[];
   };
+}
+
+export interface Version {
+  name:            string;
+  title?:          string;
+  version:         string;
+  displayVersion?: string;
+  prerelease?:     string | boolean;
+}
+
+export interface Component {
+  name:              string;
+  latest:            Version;
+  versions:          Version[];
+  latestPrerelease?: Version;
 }
 
 export interface Playbook {
@@ -42,6 +56,7 @@ export interface Page {
   src: {
     component: string;
     module: string;
+    version: string;
     abspath: string;
     origin: {
       gitdir: string;

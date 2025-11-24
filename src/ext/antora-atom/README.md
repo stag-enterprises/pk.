@@ -4,16 +4,6 @@ This extension automatically generates Atom feeds per-component for Antora.
 
 This extension is very new and barely tested so expect lots of bugs.
 
-## pitfalls
-
-Currently, having multiple versions of the same component
-does not bear well with `antora-atom`.
-
-This won't be a problem,
-eg. if you have a component named `blog` without a version,
-but if you do have versions there is very strange behavior.
-I am working on fixing this.
-
 ## installation
 
 Clone this repository and run tsc.
@@ -110,9 +100,12 @@ For example, by applying a tag `foo` to some pages,
 you can create a feed with `tags: [ '*:foo' ]`
 to only include those those pages.
 
-Note the syntax above. Tag filters have this format: `component:module:name`.
-Component can be omitted to mean the current component,
+Note the syntax above.
+Tag filters have this format: `version@component:module:name`.
+Component can be omitted to mean the current component and version,
 but module and name are always required.
+Version (with `@`) can be omitted, and the latest version will be used.
+The latest version is determined according to [Antora](https://docs.antora.org/antora/latest/how-component-versions-are-sorted/#latest-version).
 
 You can use the `*` glyph to represent any available option, as shown above.
 To get a feed with all pages from a component, you could do `*:*`.
