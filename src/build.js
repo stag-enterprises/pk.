@@ -1,4 +1,4 @@
-import { $ as sh, file, write, argv } from "bun"; 
+import { $ as sh, file, write, argv, env, stdout } from "bun"; 
 import { cpSync as cp, existsSync as exists, mkdirSync as mkdir, rmSync as rm, promises } from "node:fs";
 import { chdir, platform } from "node:process";
 import { parseArgs } from "node:util";
@@ -32,9 +32,11 @@ if (values.fetch || !exists(BUNDLE_DEST)) {
   mkdir(BUNDLE_DEST, { recursive: true });
   await write(BUNDLE_FILE, await fetch(BUNDLE_ZIP));
 
+  if (env["GITHUB_ACTIONS"]) stdout.write("::group::");
   console.info("Extracting UI bundle");
   if (platform === "win32") await sh`tar.exe -xf ${BUNDLE_FILE} -C ${BUNDLE_DEST}`;
   else await sh`unzip -o ${BUNDLE_FILE} -d ${BUNDLE_DEST}`;
+  if (env["GITHUB_ACTIONS"]) console.info("::endgroup::");
   await file(BUNDLE_FILE).unlink();
 }
 
