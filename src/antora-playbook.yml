@@ -22,4 +22,10 @@ asciidoc:
 antora:
   extensions:
     - '@antora/lunr-extension'
-    - './../build/js/antora-atom/antora-atom.js'
+    - require: './../build/js/antora-atom/antora-atom.js'
+      feed_options:
+        author:
+          name: 'stag-enterprises'
+          email: 'x@stag.lol'
+        copyright: '2025-present CC BY-SA 4.0'
+        icon: 'https://stag.lol/favicon.ico'
