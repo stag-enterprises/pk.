@@ -1,0 +1,11 @@
+{{#with page/component}}
+  {{#if (or (eq name "blog") (eq name "updates"))}}
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      title="Atom Feed"
+      href="{{@root/site/url}}/{{name}}/feed.xml"
+    >
+  {{/if}}
+{{/with}}
+
