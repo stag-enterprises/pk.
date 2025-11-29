@@ -250,7 +250,7 @@ ${feedConfig.categories?.map(x => `<category term="${x}"/>`).join("") ?? ""}
 ${feedConfig.icon ? `<icon>${feedConfig.icon}</icon>` : ""}
 ${feedConfig.logo ? `<logo>${feedConfig.logo}</logo>` : ""}
 ${feedConfig.copyright ?
-  `<rights type="text">${feedConfig.logo}</rights>` : ""}
+  `<rights type="text">${feedConfig.copyright}</rights>` : ""}
 ${feedConfig.description ?
   `<subtitle>${feedConfig.description}</subtitle>` : ""}
 ${feedPagesArr.map(x =>
