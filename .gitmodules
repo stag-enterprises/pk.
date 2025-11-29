@@ -1,3 +1,5 @@
+[submodule]
+	fetchJobs = 0
 [submodule "components/ROOT"]
 	path = components/ROOT
 	url = https://github.com/stag-enterprises/pk._pub

@@ -46,8 +46,18 @@ jobs:
         with:
           token: '${{ steps.app.outputs.token }}'
           submodules: 'recursive'
-      - name: 'Update submodules to latest' # actions/checkout doesn't support --remote
-        run: 'git submodule update --init --force --depth=1 --recursive --remote'
+        # actions/checkout doesn't support --remote
+        # this gets the latest commit tracked by the branch rather than the
+        # SHA1 commit referenced in .git
+      - name: 'Update submodules to latest'
+        # no --depth=1 because git-submodule has an issue
+        # see https://pk.stag.lol/git/submodule
+        run: |
+          git submodule foreach '
+            git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+          '
+          git submodule foreach 'git fetch origin'
+          git submodule update --init --force --recursive --remote
       - name: 'Setup Bun'
         uses: 'oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76' # v2.0.2
         with:
