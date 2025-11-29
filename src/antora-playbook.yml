@@ -16,6 +16,9 @@ ui:
 output:
   clean: true
   dir: './../build/site'
+asciidoc:
+  attributes:
+    hide-uri-scheme: true
 antora:
   extensions:
     - '@antora/lunr-extension'
