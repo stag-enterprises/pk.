@@ -31,3 +31,14 @@ fix: |
       </div> --}}
     </div>
   </$TAG>
+
+
+---
+id: 'partials/header-content.hbs.2'
+language: 'html'
+files: [ 'build/bundle/partials/header-content.hbs' ]
+rule:
+  pattern: '<$$$A id="search-input" $$$B placeholder=$C $$$D>'
+  kind: 'start_tag'
+fix: |
+  <$$$A id="search-input" $$$B placeholder="Search all pages" $$$D>
