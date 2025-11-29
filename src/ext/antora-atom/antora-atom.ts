@@ -298,7 +298,7 @@ function makePage(baseUrl: string, {
   pub: { url },
   asciidoc: { attributes, doctitle: title },
 }: T.Page): Promise<AtomPage> | undefined {
-  if (attributes["feedphobic"]) return;
+  if (!(attributes["feedphobic"] ?? true)) return;
 
   function gitlog(args: string): Promise<string> {
     return new Promise((res, rej) =>
