@@ -67,7 +67,7 @@ async function register({ config }): Promise<void> {
   }[] = []; 
   this.on("contentAggregated", ({ contentAggregate }: T.ContentAggregated) => {
     for (let {
-      name, version, ext: { atomFeed: config = undefined } = {}
+      name, version, ext: { atom: config = undefined } = {}
     } of contentAggregate) {
       if (config === false || config === null) return;
       log.info(`Found component ${name}`);

@@ -45,7 +45,7 @@ antora:
 # antora.yml
 # unless otherwise specified, fields are optional
 ext:
-  antora_feed:
+  atom:
     feed_options:
       # all feed options, to be inherited
     component_feeds:
@@ -121,14 +121,14 @@ and the tags in the component are foo and bar, then this would be the result.
 ```yaml
 # original
 ext:
-  antora_feed:
+  atom:
     component_feeds:
       - title: "All from {tag}"
         name: "{tag}"
         tags: [ "*:{*}" ]
 # result
 ext:
-  antora_feed:
+  atom:
     component_feeds:
       - title: "All from foo"
         name: "foo"
