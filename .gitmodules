@@ -12,7 +12,3 @@
 	path = components/updates
 	url = https://github.com/stag-enterprises/pk._pub
 	branch = updates
-[submodule "components/pv"]
-	path = components/pv
-	url = https://github.com/stag-enterprises/pk._pv
-	branch = main
