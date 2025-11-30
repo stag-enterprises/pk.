@@ -295,9 +295,10 @@ function makePage(baseUrl: string, {
     abspath: path,
     origin: { startPath, worktree },
   },
-  pub: { url },
-  asciidoc: { attributes, doctitle: title },
+  ...rest
 }: T.Page): Promise<AtomPage> | undefined {
+  if (!rest.pub || !rest.asciidoc) return;
+  const { pub: { url }, asciidoc: { attributes, doctitle: title } } = rest;
   if (!(attributes["feedphobic"] ?? true)) return;
 
   function gitlog(args: string): Promise<string> {

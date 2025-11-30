@@ -62,8 +62,8 @@ export interface Page {
       startPath: string;
     };
   };
-  pub: { url: string };
-  asciidoc: { attributes: Record<string, string>; doctitle: string };
+  pub?: { url: string };
+  asciidoc?: { attributes: Record<string, string>; doctitle: string };
 }
 
 export interface BeforePublish {
