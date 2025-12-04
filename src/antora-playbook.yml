@@ -18,7 +18,25 @@ output:
   dir: './../build/site'
 asciidoc:
   attributes:
+    # links become 'google.com' instead of 'https://google.com'
     hide-uri-scheme: true
+    # heading ids (eg. for 'My Heading') are #my-heading instead of #_my_heading
+    idprefix: ''
+    idseparator: '-'
+    # enable extra features
+    experimental: true
+    # html lang attribute
+    lang: 'en-US'
+    # anchor links on mouse hover over headings
+    sectanchors: true
+    # max depth of ToC
+    toclevels: 3
+    # number MathJax equations
+    eqnums: 'all'
+    # latex support
+    stem: 'latexmath'
+    # enable icons
+    icons: 'font'
 antora:
   extensions:
     - '@antora/lunr-extension'
