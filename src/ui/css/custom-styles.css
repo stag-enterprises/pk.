@@ -1,5 +1,23 @@
+/* For the CC license icons */
 .footer-copyright img {
-	max-width: 1em;
-	max-height: 1em;
+	max-width:   1em;
+	max-height:  1em;
 	margin-left: .2em;
+}
+
+/* Select all absolute links not local to the site and always underline */
+/* Default behavior is to only underline on hover                       */
+a[href*="//"]:not([href*="stag.lol"]) {
+  text-decoration: underline;
+  /* Select children recursively without any children except text   */
+  /* Needed for links with a code block for example                 */
+  /* If there's nothing then apply it directly to the link          */
+  /* This will break if a link's text has multiple formatting parts */
+  & :not(:has(*)):after, &:not(:has(*)):after {
+    content:         "🡭";
+    vertical-align:  super;
+    font-size:       0.7em;
+    text-decoration: none !important;
+    color:           inherit;
+  }
 }
