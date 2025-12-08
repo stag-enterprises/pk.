@@ -44,7 +44,7 @@ asciidoc:
 antora:
   extensions:
     - '@antora/lunr-extension'
-    - require: './../build/js/antora-atom/antora-atom.js'
+    - require: './../build/js/ext/antora-atom/antora-atom.js'
       feed_options:
         author:
           name: 'stag-enterprises'
