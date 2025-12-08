@@ -1,0 +1,13 @@
+id: 'partials/footer-scripts.hbs'
+language: 'html'
+files: [ 'build/bundle/partials/footer-scripts.hbs' ]
+rule:
+  pattern: '$DOCUMENT'
+  kind: 'document'
+fix: |
+  $DOCUMENT
+  <script
+    async
+    src="{{{uiRootPath}}}/js/vendor/tabs.js"
+    data-sync-storage-key="selected-tab">
+  </script>

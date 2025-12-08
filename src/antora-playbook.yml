@@ -12,7 +12,7 @@ content:
 ui:
   bundle:
     url: './../build/bundle'
-  supplemental_files: './ui'
+  supplemental_files: './../build/ui'
 output:
   clean: true
   dir: './../build/site'
@@ -37,6 +37,10 @@ asciidoc:
     stem: 'latexmath'
     # enable icons
     icons: 'font'
+    # when one tab is selected, change other tab groups to the tab with the same name
+    tabs-sync-option: true
+  extensions:
+    - '@asciidoctor/tabs'
 antora:
   extensions:
     - '@antora/lunr-extension'
