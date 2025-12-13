@@ -26,6 +26,9 @@
   "trustedDependencies": [
     "@ast-grep/cli",
   ],
+  "patchedDependencies": {
+    "@antora/lunr-extension@1.0.0-alpha.12": "src/patches/node_modules/@antora%2Flunr-extension@1.0.0-alpha.12.patch",
+  },
   "packages": {
     "@antora/asciidoc-loader": ["@antora/asciidoc-loader@3.1.14", "", { "dependencies": { "@antora/logger": "3.1.14", "@antora/user-require-helper": "~3.0", "@asciidoctor/core": "~2.2" } }, "sha512-4xxisnoBFrlLNY6f3xZtyyfgm+tBLsqesTcEStfc8jtXUMYJ4b2DWIzo1vULmxvZ7yY5+Q7YqEvS5o6kIWAG0A=="],
 

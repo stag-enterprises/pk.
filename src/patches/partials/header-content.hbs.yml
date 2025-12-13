@@ -41,4 +41,7 @@ rule:
   pattern: '<$$$A id="search-input" $$$B placeholder=$C $$$D>'
   kind: 'start_tag'
 fix: |
-  <$$$A id="search-input" $$$B placeholder="Search all pages" $$$D>
+  <div class="search-input-wrapper">
+    <$$$A id="search-input" $$$B placeholder="Search all pages" $$$D>
+    <a target="_blank" href="https://lunrjs.com/guides/searching.html" title="Search tips">ⓘ</a>
+  </div>

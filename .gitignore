@@ -1,4 +1,4 @@
-build/
-node_modules/
-local-antora-playbook.yml
+/build/
+/node_modules/
+/src/local-antora-playbook.yml
 .DS_Store
